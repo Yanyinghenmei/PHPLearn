@@ -270,7 +270,7 @@ function down_file(string $filename, $allowDownExt=['png','jpg','jpeg','gif','tx
  * @param  array  $allowDownExt 可以下载的格式
  * @return void
  */
-function down_file_section(string $filename, $allowDownExt=['png','jpg','jpeg','gif','txt','html','tar','zip']) {
+function file_down_section(string $filename, $allowDownExt=['png','jpg','jpeg','gif','txt','html','tar','zip']) {
   // 检测下载文件是否存在并可读
   if (!is_file($filename)) {
     return false;
@@ -302,6 +302,98 @@ function down_file_section(string $filename, $allowDownExt=['png','jpg','jpeg','
   }
   fclose($handle);
   exit;
+}
+
+/**
+ * 单文件上传
+ * @param  array   $fileInfo   [文件信息]
+ * @param  string  $uploadPath [默认保存路径]
+ * @param  boolean $imageFlag  [是否检测真是图片]
+ * @param  array   $allowExt   [允许上传的文件类型]
+ * @return mixed               [保存路径/错误信息]
+ */
+function file_upload(array $fileInfo,
+                    string $uploadPath='./uploads',
+                      bool $imageFlag=true,
+                     array $allowExt=array('jpeg','jpg','png','gif'),
+                       int $maxSize=2097152) {
+
+  /*
+  $allowExt
+  $maxSize
+  $imageFlag
+  $uploadPath
+   */
+
+  define('UPLOAD_ERRS',[
+    'upload_max_filesize'=>'超过了PHP配置文件中upload_max_filesize选项的值',
+    'form_max_size'=>'文件超过了表单MAX_FILE_SIZE选项的值',
+    'upload_file_partial'=>'文件部分被上传',
+    'no_upload_file_select'=>'没有选择上传文件',
+    'upload_system_error'=>'系统错误',
+    'no_allow_ext'=>'非法文件类型',
+    'exceed_max_size'=>'超出允许上传的最大值',
+    'not_true_image'=>'不是真是图片',
+    'not_http_post'=>'不是post方式上传',
+    'move_error'=>'文件移动失败'
+  ]);
+
+  // 检测上传是否有错误
+  if ($fileInfo['error']===UPLOAD_ERR_OK) {
+    // 检测上传文件类型
+    $ext = strtolower(pathinfo($fileInfo['name'],PATHINFO_EXTENSION));
+    if (!in_array($ext,$allowExt)) {
+      return UPLOAD_ERRS['no_allow_ext'];
+    }
+    // 上传文件大小是否符合规范
+    if ($fileInfo['size']>$maxSize) {
+      return UPLOAD_ERRS['exceed_max_size'];
+    }
+    // 检测是否是真是图片
+    if ($imageFlag) {
+      if (@!getimagesize($fileInfo['tmp_name'])) {
+        return UPLOAD_ERRS['not_true_image'];
+      }
+    }
+    // 检测文件是否是通过HTTP POST方式上传的
+    if (!is_uploaded_file($fileInfo['tmp_name'])) {
+      return UPLOAD_ERRS['not_http_post'];
+    }
+
+    // 检测目录是否存在
+    if (!is_dir($uploadPath)) {
+      mkdir($uploadPath,0777,true);
+    }
+    // 生成唯一文件名,防止重名覆盖
+    $uniName=md5(uniqid(microtime(true),true)).'.'.$ext;
+    $dest = $uploadPath.DIRECTORY_SEPARATOR.$uniName;
+    // 移动服务器端的临时文件
+    if (@!move_uploaded_file($fileInfo['tmp_name'],$dest)) {
+      return UPLOAD_ERRS['move_error'];
+    }
+    return $dest;
+  } else {
+    switch ($fileInfo['error']) {
+      case 1:
+        $mes = UPLOAD_ERRS['upload_max_filesize'];
+        break;
+      case 2:
+        $mes = UPLOAD_ERRS['form_max_size'];
+        break;
+      case 3:
+        $mes = UPLOAD_ERRS['upload_file_partial'];
+        break;
+      case 4:
+        $mes = UPLOAD_ERRS['no_upload_file_select'];
+        break;
+      case 6:
+      case 7:
+      case 8:
+        $mes = UPLOAD_ERRS['upload_system_error'];
+        break;
+    }
+    return $mes;
+  }
 }
 
 // echo file_truncate('../testfile.txt',6);
