@@ -6,14 +6,44 @@ print_r($fileInfo);
 $filename=$fileInfo['name'];
 $type=$fileInfo['type'];
 $tmp_name=$fileInfo['tmp_name'];
-$size=$fileInfo['error'];
+$size=$fileInfo['size'];
+$error=$fileInfo['error'];
 
-// 将服务器上的零时文件移动到指定目录下
-// move_uploaded_file($tmp_name,$destination)
-// move_uploaded_file($tmp_name,'./uploads/'.$filename);
-
-// copy($src,$dst): 将文件拷贝到指定文件
-copy($tmp_name,$filename);
+if ($error == UPLOAD_ERR_OK) {
+  // 将服务器上的零时文件移动到指定目录下
+  // move_uploaded_file($tmp_name,$destination)
+  if (move_uploaded_file($tmp_name,'./uploads/'.$filename)) {
+    echo '文件上传成功';
+  } else {
+    echo '文件上传失败';
+  }
+  // copy($src,$dst): 将文件拷贝到指定文件
+  // copy($tmp_name,$filename);
+} else {
+  switch ($error) {
+    case '1':
+      echo "上传文件超过了php.ini中upload_max_filesize";
+      break;
+    case '2':
+      echo "上传文件超过了HTML表单中MAX_FILE_SIZE选项指定的值";
+      break;
+    case '3':
+      echo "文件只有部分被上传";
+      break;
+    case '4':
+      echo "没有文件被上传";
+      break;
+    case '6':
+      echo "找不到临时文件";
+      break;
+    case '7':
+      echo "文件写入失败";
+      break;
+    case '8':
+      echo "上传的文件被PHP扩展程序中断";
+      break;
+  }
+}
 /*
 Array
 (
@@ -49,4 +79,25 @@ Array
     E_WAARNING的产生, 工多的输入变量将会从请求中截断
  memory_limit = 128M, 最大单线程的独立内存的使用量, 也就是一个web请求,给予线程最大的内
     存使用量的定义
+ */
+
+/*
+  错误号:
+  UPLOAD_ERR_OK          0  没有错误,文件上传成功
+  UPLOAD_ERR_INI_SIZE    1  上传文件超过了php.ini中upload_max_filesize
+  UPLOAD_ERR_FORM_SIZE   2  上传文件超过了HTML表单中MAX_FILE_SIZE选项指定的值
+  UPLOAD_ERR_PARTIAL     3  文件只有部分被上传
+  UPLOAD_ERR_NO_FILE     4  没有文件被上传
+  UPLOAD_ERR_NO_TMP_DIR  6  找不到临时文件
+  UPLOAD_ERR_CANT_WRITE  7  文件写入失败
+  UPLOAD_ERR_EXTENSION   8  上传的文件被PHP扩展程序中断
+
+ */
+
+/*
+  上传文件客户端限制
+  ·通过表单隐藏域限制上传文件的最大值
+  <input type="hidden" name="MAX_FILE_SIZE" value="字节数">
+  ·通过accept属性限制上传文件类型
+  <input type="file" name="myFile" accept="文件的MIME类型">
  */
