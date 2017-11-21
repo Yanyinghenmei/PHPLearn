@@ -1,6 +1,7 @@
 <?php
 header('content-type:text/html;charset=utf-8');
-require_once 'file.func.php';
+// require_once 'file.func.php';
+require_once 'upload.class.php';
 
 // print_r($_FILES);
 
@@ -18,13 +19,17 @@ require_once 'file.func.php';
 
 // 多文件上传
 // print_r($_FILES['myFile']);
-$res = (file_multiple_upload());
+// $res = (file_multiple_upload());
+//
+// foreach ($res as $result) {
+//   if ($result['return_code']) {
+//     $uploadFiles[]=$result['mes'];
+//   }
+// }
+//
+// $uploadFiles = array_values(array_filter($uploadFiles));
+// print_r($uploadFiles);
 
-foreach ($res as $result) {
-  if ($result['return_code']) {
-    $uploadFiles[]=$result['mes'];
-  }
-}
-
-$uploadFiles = array_values(array_filter($uploadFiles));
-print_r($uploadFiles);
+$upload = new upload();
+$dest = $upload->uploadFile();
+var_dump($dest);
