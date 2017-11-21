@@ -1,5 +1,20 @@
 <?php
 
+
+define('UPLOAD_ERRS',[
+  'upload_max_filesize'=>'超过了PHP配置文件中upload_max_filesize选项的值',
+  'form_max_size'=>'文件超过了表单MAX_FILE_SIZE选项的值',
+  'upload_file_partial'=>'文件部分被上传',
+  'no_upload_file_select'=>'没有选择上传文件',
+  'upload_system_error'=>'系统错误',
+  'no_allow_ext'=>'非法文件类型',
+  'exceed_max_size'=>'超出允许上传的最大值',
+  'not_true_image'=>'不是真实图片',
+  'not_http_post'=>'不是post方式上传',
+  'move_error'=>'文件移动失败'
+]);
+
+
 /**
  * 创建文件
  * @param  string $filename 文件名
@@ -313,7 +328,7 @@ function file_down_section(string $filename, $allowDownExt=['png','jpg','jpeg','
  * @return mixed               [保存路径/错误信息]
  */
 function file_upload(array $fileInfo,
-                    string $uploadPath='./uploads',
+                    string $uploadPath='uploads',
                       bool $imageFlag=true,
                      array $allowExt=array('jpeg','jpg','png','gif'),
                        int $maxSize=2097152) {
@@ -325,39 +340,26 @@ function file_upload(array $fileInfo,
   $uploadPath
    */
 
-  define('UPLOAD_ERRS',[
-    'upload_max_filesize'=>'超过了PHP配置文件中upload_max_filesize选项的值',
-    'form_max_size'=>'文件超过了表单MAX_FILE_SIZE选项的值',
-    'upload_file_partial'=>'文件部分被上传',
-    'no_upload_file_select'=>'没有选择上传文件',
-    'upload_system_error'=>'系统错误',
-    'no_allow_ext'=>'非法文件类型',
-    'exceed_max_size'=>'超出允许上传的最大值',
-    'not_true_image'=>'不是真是图片',
-    'not_http_post'=>'不是post方式上传',
-    'move_error'=>'文件移动失败'
-  ]);
-
   // 检测上传是否有错误
   if ($fileInfo['error']===UPLOAD_ERR_OK) {
     // 检测上传文件类型
     $ext = strtolower(pathinfo($fileInfo['name'],PATHINFO_EXTENSION));
     if (!in_array($ext,$allowExt)) {
-      return UPLOAD_ERRS['no_allow_ext'];
+      return array(false,UPLOAD_ERRS['no_allow_ext']);
     }
     // 上传文件大小是否符合规范
     if ($fileInfo['size']>$maxSize) {
-      return UPLOAD_ERRS['exceed_max_size'];
+      return array(false,UPLOAD_ERRS['exceed_max_size']);
     }
     // 检测是否是真是图片
     if ($imageFlag) {
       if (@!getimagesize($fileInfo['tmp_name'])) {
-        return UPLOAD_ERRS['not_true_image'];
+        return array(false,UPLOAD_ERRS['not_true_image']);
       }
     }
     // 检测文件是否是通过HTTP POST方式上传的
     if (!is_uploaded_file($fileInfo['tmp_name'])) {
-      return UPLOAD_ERRS['not_http_post'];
+      return array(false,UPLOAD_ERRS['not_http_post']);
     }
 
     // 检测目录是否存在
@@ -369,9 +371,9 @@ function file_upload(array $fileInfo,
     $dest = $uploadPath.DIRECTORY_SEPARATOR.$uniName;
     // 移动服务器端的临时文件
     if (@!move_uploaded_file($fileInfo['tmp_name'],$dest)) {
-      return UPLOAD_ERRS['move_error'];
+      return array(false,UPLOAD_ERRS['move_error']);
     }
-    return $dest;
+    return array(true,$dest);
   } else {
     switch ($fileInfo['error']) {
       case 1:
@@ -392,24 +394,46 @@ function file_upload(array $fileInfo,
         $mes = UPLOAD_ERRS['upload_system_error'];
         break;
     }
-    return $mes;
+    return array(false,$mes);
   }
 }
 
-// echo file_truncate('../testfile.txt',6);
-// echo file_write_cover('../testfile.txt', '12312312312313');
-// echo file_write_append('../testfile.txt', '12312312312313');
-// echo file_read('../testfile.txt');
-// echo '<br />';
-// print_r(file_read_array('../testfile.txt'));
-// echo '<br />';
-// print_r(file_read_array('../testfile.txt',true));
-// print_r(file_get_info('../1-file.php'));
-// echo '<br />'.file_trans_byte(123123131);
+/**
+ * 重构文件上传的数据
+ * @param  array $info 接收到的数据
+ * @return array       重构完成的数据
+ */
+function file_get_files($info) {
+  $i=0;
+  $files=array();
+  foreach ($info as $file) {
+    if (is_string($file['name'])) {
+      // 单文件
+      $files[$i]=$file;
+      $i++;
+    } elseif (is_array($file['name'])) {
+      // 多文件
+      foreach ($file['name'] as $key => $value) {
+        $files[$i]['name']=$file['name'][$key];
+        $files[$i]['type']=$file['type'][$key];
+        $files[$i]['tmp_name']=$file['tmp_name'][$key];
+        $files[$i]['error']=$file['error'][$key];
+        $files[$i]['size']=$file['size'][$key];
+        $i++;
+      }
+    }
+  }
+  return $files;
+}
 
-
-
-
-
-
-///
+function file_multiple_upload($fileArray) {
+  if (!count($fileArray)) {
+    return array(false,'上传文件太大, 超过post_max_size');
+  }
+  $files = file_get_files($fileArray);
+  $results=array();
+  foreach ($files as $fileInfo) {
+    $results[]=file_upload($fileInfo);
+  }
+  return $results;
+}
