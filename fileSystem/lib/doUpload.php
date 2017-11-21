@@ -2,6 +2,8 @@
 header('content-type:text/html;charset=utf-8');
 require_once 'file.func.php';
 
+// print_r($_FILES);
+
 // echo '<pre>';
 // print_r($_FILES);
 
@@ -16,4 +18,13 @@ require_once 'file.func.php';
 
 // 多文件上传
 // print_r($_FILES['myFile']);
-print_r(file_multiple_upload($_FILES));
+$res = (file_multiple_upload());
+
+foreach ($res as $result) {
+  if ($result['return_code']) {
+    $uploadFiles[]=$result['mes'];
+  }
+}
+
+$uploadFiles = array_values(array_filter($uploadFiles));
+print_r($uploadFiles);

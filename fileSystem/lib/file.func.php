@@ -345,21 +345,21 @@ function file_upload(array $fileInfo,
     // 检测上传文件类型
     $ext = strtolower(pathinfo($fileInfo['name'],PATHINFO_EXTENSION));
     if (!in_array($ext,$allowExt)) {
-      return array(false,UPLOAD_ERRS['no_allow_ext']);
+      return array('return_code'=>false,'mes'=>UPLOAD_ERRS['no_allow_ext']);
     }
     // 上传文件大小是否符合规范
     if ($fileInfo['size']>$maxSize) {
-      return array(false,UPLOAD_ERRS['exceed_max_size']);
+      return array('return_code'=>false,'mes'=>UPLOAD_ERRS['exceed_max_size']);
     }
     // 检测是否是真是图片
     if ($imageFlag) {
       if (@!getimagesize($fileInfo['tmp_name'])) {
-        return array(false,UPLOAD_ERRS['not_true_image']);
+        return array('return_code'=>false,'mes'=>UPLOAD_ERRS['not_true_image']);
       }
     }
     // 检测文件是否是通过HTTP POST方式上传的
     if (!is_uploaded_file($fileInfo['tmp_name'])) {
-      return array(false,UPLOAD_ERRS['not_http_post']);
+      return array('return_code'=>false,'mes'=>UPLOAD_ERRS['not_http_post']);
     }
 
     // 检测目录是否存在
@@ -371,9 +371,9 @@ function file_upload(array $fileInfo,
     $dest = $uploadPath.DIRECTORY_SEPARATOR.$uniName;
     // 移动服务器端的临时文件
     if (@!move_uploaded_file($fileInfo['tmp_name'],$dest)) {
-      return array(false,UPLOAD_ERRS['move_error']);
+      return array('return_code'=>false,'mes'=>UPLOAD_ERRS['move_error']);
     }
-    return array(true,$dest);
+    return array('return_code'=>true,'mes'=>$dest);
   } else {
     switch ($fileInfo['error']) {
       case 1:
@@ -394,7 +394,7 @@ function file_upload(array $fileInfo,
         $mes = UPLOAD_ERRS['upload_system_error'];
         break;
     }
-    return array(false,$mes);
+    return array('return_code'=>false,'mes'=>$mes);
   }
 }
 
@@ -426,11 +426,11 @@ function file_get_files($info) {
   return $files;
 }
 
-function file_multiple_upload($fileArray) {
-  if (!count($fileArray)) {
+function file_multiple_upload() {
+  if (!count($_FILES)) {
     return array(false,'上传文件太大, 超过post_max_size');
   }
-  $files = file_get_files($fileArray);
+  $files = file_get_files($_FILES);
   $results=array();
   foreach ($files as $fileInfo) {
     $results[]=file_upload($fileInfo);
