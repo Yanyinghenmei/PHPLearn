@@ -426,6 +426,10 @@ function file_get_files($info) {
   return $files;
 }
 
+/**
+ * 多文件上海窜
+ * @return array 上传结果
+ */
 function file_multiple_upload() {
   if (!count($_FILES)) {
     return array(false,'上传文件太大, 超过post_max_size');
@@ -437,3 +441,45 @@ function file_multiple_upload() {
   }
   return $results;
 }
+
+/**
+ * 压缩单个文件
+ * @param  string $filename 文件名
+ * @return bool             压缩结果
+ */
+function zip_file(string $filename) {
+  if (!is_file($filename)) {
+    return false;
+  }
+
+  $zip = new ZipArchive();
+  $zipName = basename($filename).'.zip';
+  // 打开压缩包, 不存在创建, 存在则覆盖
+  if ($zip->open($zipName,ZipArchive::CREATE|ZipArchive::OVERWRITE)) {
+    // 将文件添加到压缩包中
+    if($zip->addFile($filename)) {
+      // @unlink($filename);
+    }
+    $zip->close();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+var_dump(zip_file('uploads/1.jpg'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
