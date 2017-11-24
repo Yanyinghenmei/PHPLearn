@@ -447,7 +447,7 @@ function file_multiple_upload() {
  * @param  string $filename 文件名
  * @return bool             压缩结果
  */
-function zip_file(string $filename) {
+function file_zip(string $filename) {
   if (!is_file($filename)) {
     return false;
   }
@@ -457,8 +457,58 @@ function zip_file(string $filename) {
   // 打开压缩包, 不存在创建, 存在则覆盖
   if ($zip->open($zipName,ZipArchive::CREATE|ZipArchive::OVERWRITE)) {
     // 将文件添加到压缩包中
-    if($zip->addFile($filename)) {
-      // @unlink($filename);
+    if($zip->addFile($filename, basename($filename))) {
+      $zip->close();
+      @unlink($filename);
+      return true;
+    } else {
+      $zip->close();
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+/**
+ * 压缩多个文件
+ * @param  string $zipName 压缩后压缩包名称
+ * @param  array $files   要压缩的文件
+ * @return bool          true|false
+ */
+function file_multiple_zip(array $files,string $zipName = null) {
+  // 检测参数是否完备
+  if (!count($files)) {
+    return false;
+  } else {
+    if (!$zipName) {
+      if (count($files) == 1) {
+        $zipName = basename($files[0]).'.'.'zip';
+      } else {
+        $zipName = '归档.zip';
+      }
+    }
+  }
+  // 检测文件是否在同一目录中
+  $upperFile = pathinfo($files[0],PATHINFO_DIRNAME);
+  foreach ($files as $value) {
+    if ($upperFile !== pathinfo($value,PATHINFO_DIRNAME)) {
+      return false;
+    }
+  }
+  // 检测压缩包名称是否正确
+  $zipExt = strtolower(pathinfo($zipName,PATHINFO_EXTENSION));
+  if ('zip' !== $zipExt) {
+    return false;
+  }
+  $zip = new ZipArchive();
+  if ($zip->open($zipName,ZipArchive::CREATE|ZipArchive::OVERWRITE)) {
+    foreach ($files as $file) {
+      if (is_file($file)) {
+        $zip->addFile($file,basename($file));
+      } elseif (is_dir($file)) {
+        addDirectoryToZip($file,$zip);
+      }
     }
     $zip->close();
     return true;
@@ -467,8 +517,53 @@ function zip_file(string $filename) {
   }
 }
 
-var_dump(zip_file('uploads/1.jpg'));
+/**
+ * 将文件夹添加到压缩包
+ * @param string     $path 要添加的文件夹路径
+ */
+function addDirectoryToZip($path,ZipArchive $zip) {
+  $handle = opendir($path);
+  $zip->addEmptyDir($path);
+  while ($filename=readdir($handle)) {
+    if ($filename != '.' && $filename != '..') {
+      if (is_dir($path.DIRECTORY_SEPARATOR.$filename)) {
+        addDirectoryToZip($path.DIRECTORY_SEPARATOR.$filename,$zip);
+      } else {
+        $zip->addFile($path.DIRECTORY_SEPARATOR.$filename);
+      }
+    }
+  }
+}
 
+function file_unzip(string $zipName, string $dest = null) {
+  if (!$dest) {
+    $dest = pathinfo($zipName,PATHINFO_DIRNAME);
+  }
+
+  // 检测要解压的压缩包是否存在
+  if (!is_file($zipName)) {
+    return false;
+  }
+  // 目标路径是否存在
+  if (!is_dir($dest)) {
+    mkdir($dest,0777,true);
+  }
+  $zip = new ZipArchive();
+  if ($zip->open($zipName)) {
+  var_dump($zip->numFiles);
+    $zip->extractTo($dest);
+    $zip->close();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+var_dump(file_zip('uploads/1.jpg'));
+// var_dump(file_multiple_zip(array('./UserNotificationDemo-master')));
+// var_dump(file_unzip('归档.zip'));
+// file_unzip('./UserNotificationDemo-master.zip');
 
 
 
