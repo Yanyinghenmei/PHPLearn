@@ -1,0 +1,59 @@
+常见数据库: Oracle, DB2, SQL Server, Postgre SQL, MySQL
+
+// MySQL 关系型数据库
+
+// 相关术语
+数据库系统 Database System(DBS)
+·数据库 Database
+·数据库管理系统(Database Management System,DBMS)
+·应用开发工具
+·管理员及用户
+
+// SQL语言: 结构化查询语言
+·DDL 数据定义语言
+·DML 数据操纵语言  插入,更新,删除
+·DQL 数据查询语言  查询
+·DCL 数据控制语言  控制用户权限
+
+// MySQL 的配置文件: my.cnf
+
+// 登录/退出MySQL
+·登录: mysql -uroot -p
+·退出: exit
+
+·登录: mysql -uroot -p密码
+·退出: quit
+
+// 得到版本号
+·未登录时查看版本号: mysql -uroot -p密码 -V
+·mysql -uroot -p -V
+·mysql -V
+·mysql --version
+
+// 登录的同时打开指定数据库
+·mysql -uroot -p -D db_name
+
+// 登录信息中需要了解: 命令行结束默认是用';'或'\g'结束
+
+// 查看帮助手册: 'help' 或 '\h' 或 '?' + 相关关键字
+
+// 取消当前命令的执行 把';' 换成 '\c'
+
+// 常用SQL语句
+·SELECT USER() 得到登录的用户
+·SELECT VERSION() 得到MySQL的版本信息
+·SELECT NEW() 得到当前时间
+·SELECT DATABASE() 得到当前打开的数据库
+
+// SQL语句语法规范
+·常用的MySQL的关键字需要大写, 库名, 表名, 字段名称小写
+·SQL语句支持折行操作: 拆分的时候不要把完整的单词拆开
+·数据库名称, 表名称, 字段名称不要使用MySQL的保留字, 如果必须使用, 需要用反引号``括起来
+·
+
+
+
+
+
+
+//
