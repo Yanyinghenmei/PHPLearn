@@ -42,7 +42,7 @@
 // 常用SQL语句
 ·SELECT USER() 得到登录的用户
 ·SELECT VERSION() 得到MySQL的版本信息
-·SELECT NEW() 得到当前时间
+·SELECT NOW() 得到当前时间
 ·SELECT DATABASE() 得到当前打开的数据库
 
 // SQL语句语法规范
