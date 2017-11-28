@@ -28,3 +28,21 @@ CREATE TABLE test_zerofill(
   d int ZEROFILL,
   e bigint ZEROFILL
 );
+
+-- 下面的'2', 会导致ZEROFILL自动补全是两位, 可插入的数据范围不变,
+-- 并且如果插入的数据位数超出, 插入结果不会截断
+CREATE TABLE test_length(
+  a tinyint(2) ZEROFILL,
+  b smallint(2) ZEROFILL
+);
+
+-- 结果
+INSERT test_length(a,b) VALUES(1231,1231);
+INSERT test_length(a,b) VALUES(1,1);
+SELECT * FROM test_length;
+-- +------+------+
+-- | a    | b    |
+-- +------+------+
+-- |  255 | 1231 |
+-- |   01 |   01 |
+-- +------+------+
