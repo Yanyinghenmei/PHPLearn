@@ -2,35 +2,35 @@
 
 // MySQL 关系型数据库
 
-// 相关术语
+## 相关术语
 数据库系统 Database System(DBS)
 ·数据库 Database
 ·数据库管理系统(Database Management System,DBMS)
 ·应用开发工具
 ·管理员及用户
 
-// SQL语言: 结构化查询语言
+## SQL语言: 结构化查询语言
 ·DDL 数据定义语言
 ·DML 数据操纵语言  插入,更新,删除
 ·DQL 数据查询语言  查询
 ·DCL 数据控制语言  控制用户权限
 
-// MySQL 的配置文件: my.cnf
+## MySQL 的配置文件: my.cnf
 
-// 登录/退出MySQL
+## 登录/退出MySQL
 ·登录: mysql -uroot -p
 ·退出: exit
 
 ·登录: mysql -uroot -p密码
 ·退出: quit
 
-// 得到版本号
+## 得到版本号
 ·未登录时查看版本号: mysql -uroot -p密码 -V
 ·mysql -uroot -p -V
 ·mysql -V
 ·mysql --version
 
-// 登录的同时打开指定数据库
+## 登录的同时打开指定数据库
 ·mysql -uroot -p -D db_name
 
 // 登录信息中需要了解: 命令行结束默认是用';'或'\g'结束
@@ -39,21 +39,88 @@
 
 // 取消当前命令的执行 把';' 换成 '\c'
 
-// 常用SQL语句
+## 常用SQL语句
 ·SELECT USER() 得到登录的用户
 ·SELECT VERSION() 得到MySQL的版本信息
 ·SELECT NOW() 得到当前时间
 ·SELECT DATABASE() 得到当前打开的数据库
+·SHOW DATABASES|SCHEMAS;
+·SHOW WARNINGS; 查看上一步操作产生的警告
 
-// SQL语句语法规范
+## SQL语句语法规范
 ·常用的MySQL的关键字需要大写, 库名, 表名, 字段名称小写
 ·SQL语句支持折行操作: 拆分的时候不要把完整的单词拆开
 ·数据库名称, 表名称, 字段名称不要使用MySQL的保留字, 如果必须使用, 需要用反引号``括起来
 ·
 
 
+## 数据库相关操作(DDL)
+·创建数据库:
+    CREATE {DATABASE|SCHEMA} db_name;
+    注意: 数据库名称最后又意义
+    不要包含关键字/保留字
+·不存在则创建:
+    CREATE DATABASE [IF NOT EXISTS] db_name;
+·创键数据库同事置顶编码方式:
+    CREATE DATABASE [IF NOT EXISTS] db_name [DEFAULT] CHARACTER SET [=] charset;
+·查看指定数据库的详细信息
+    SHOW CREATE DATABASE db_name;
+·修改指定数据库的编码方式:
+    ALTER DATABASE db_name [DEFAULT] CHARACTER SET [=] charset;
+·打开指定数据库:
+    USE db_name;
+·得到当前打开的数据库:
+    SELECT DATABASE|SCHEMA();
+·删除指定的数据库:
+    DROP DATABASE db_name;
+·如果数据库存在删除:
+    DROP DATABASE [IF EXISTS] db_name;
 
 
 
+
+## 数据表相关操作
+   数据表是数据库中最重要的组成部分之一, 数据是保存在数据表中
+   数据表由行(row)和列(column)组成
+   每个数据表中至少有一列, 行可以有0行或多行
+   表名要求唯一, 不要包含特殊字符, 最好含义明确
+
+·创建数据表:
+    CREATE TABLE [IF NOT EXISTS] tbl_name(
+      字段名称 字段类型 [完整性约束条件],
+      字段名称 字段类型 [完整性约束条件]
+    )ENGINE=存储引擎 CHARSET=编码方式;
+·查看已有的数据表:
+    SHOW [FULL] TABLES [{FROM | IN} db_name]
+    [LIKE 'pattern' | WHERE expr];
+·查看指定数据表的详细信息:
+    SHOW CREATE TABLE tbl_name;
+·查看表结构
+    DESC tbl_name;
+    DESCRIBE tbl_name;
+    SHOW COLUMNS FROM tbl_name;
+·删除指定的数据表
+
+## MySQL的数据类型
+·数值型
+    ·整数型
+    ·浮点数
+    ·定点数
+·字符串类型
+·日期时间类型
+
+## 完整性约束条件
+·UNSIGNED 无符号, 从零开始
+·ZEROFILL 零填充, 当现实长度不够的时候可以使用前补零的效果填充至指定长度
+·NOT NULL 非空约束, 也就是插入值得时候, 这个字段必须有值
+·DEFAULT 默认值
+·PRIMARY KEY 主键, 标记记录的唯一性, 不能重复, 一个表只能有一个主键, 自动禁止为空
+·UNIQUE KEY 唯一性, 一个表可以有多个唯一所以, 值不能重复, 但NULL可以
+·AUTO_INCREMEN 自增长, 只能用于数值列, 而且配合索引所有
+·FOREIGN KEY 外键约束
+
+## 插入
+INSERT
+## 查询
 
 //
