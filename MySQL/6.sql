@@ -23,3 +23,24 @@ CREATE TABLE test_text(
 );
 -- 报错: ERROR 1101 (42000): BLOB/TEXT column 'content' can't have a default value
 -- TEXT 在检索过程中不存在大小写转换
+
+-- 测试枚举类型
+CREATE TABLE test_enum(
+  sex ENUM('男','女','保密')
+);
+
+INSERT test_enum(sex) VALUES('男');
+INSERT test_enum(sex) VALUES(NULL);
+INSERT test_enum(sex) VALUES(1);
+
+-- 测试集合
+CREATE TABLE test_set(
+  a SET('A','B','C','D','E','F')
+);
+
+INSERT test_set(a) VALUES('A');
+INSERT test_set(a) VALUES('B');
+INSERT test_set(a) VALUES('C','B','F'); -- 错误的
+INSERT test_set(a) VALUES('C,B,A'); -- 正确的
+INSERT test_set(a) VALUES('CBA'); -- 错误的
+INSERT test_set(a) VALUES('C,B,H'); -- 正确的
