@@ -85,3 +85,52 @@ ALTER TABLE `unique_user` ADD UNIQUE KEY(username);
 ALTER TABLE `unique_user` ADD UNIQUE KEY uni_email(email);
 -- 删除索引  这里只能写INDEX
 ALTER TABLE `unique_user` DROP INDEX uni_email;
+
+
+
+-- 测试MyiSAM 存储引擎
+CREATE table test_myisam(
+  `id` INT UNSIGNED AUTO_INCREMENT KEY,
+  `a` INT UNSIGNED,
+  `b` VARCHAR(20),
+  `c` CHAR(32)
+)ENGINE=MyISAM;
+
+-- 定长数据表
+CREATE TABLE myisam_1(
+  a char(30),
+  id INT
+)ENGINE=MyISAM;
+
+-- 查看表状态
+SHOW TABLE STATUS LIKE 'myisam_1'\G
+-- 结果:
+-- Name: myisam_1
+-- Engine: MyISAM
+-- Version: 10
+-- Row_format: Fixed
+-- Rows: 0
+-- Avg_row_length: 0
+-- Data_length: 0
+-- Max_data_length: 26740122787512319
+-- Index_length: 1024
+-- Data_free: 0
+-- Auto_increment: NULL
+-- Create_time: 2017-12-04 00:12:41
+-- Update_time: 2017-12-04 00:12:41
+-- Check_time: NULL
+-- Collation: utf8_general_ci
+-- Checksum: NULL
+-- Create_options:
+-- Comment:
+
+
+-- 变长数据表
+CREATE TABLE `myisam_2`(
+  `a` VARCHAR(30)
+)ENGINE=MyISAM;
+
+-- 设置为定长(静态)数据表
+CREATE TABLE `myisam_3`(
+  `b` VARCHAR(32)
+)ENGINE=MyISAM ROW_FORMAT=FIXED;

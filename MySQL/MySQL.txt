@@ -150,4 +150,35 @@ INSERT
 ## 删除唯一
     ALTER TABLE tbl_name DROP INDEX index_name;
 
+## 修改表名
+    ALTER TABLE tbl_name RENAME [TO|AS] new_name;
+    RENAME TABLE tbl_name TO new_name;
+
+
+
+## MySQL存储引擎
+·MyiSAM 存储引擎
+  MySQL5.5之前的默认引擎 MyISAM 默认产生以下三个文件,
+  可以在渐变的时候指定数据文件和索引文件的位置, 只有MyISAM表支持
+  DATA DIRECORY [=] 绝对路径
+  INDEXDIRECORY [=] 绝对路径
+    ·frm表结构文件
+    ·MYD存储数据的文件
+    ·MYI索引文件
+  MyISAM 单表最大支持的数据量: 2^64 条记录; 每个表最多可以建立64个索引
+  复合索引最多包含16个字段(列), 索引值最大长度是1000DB
+  MyISAM引擎的存储格式:
+    定长(FIXED 静态 字段中包含了VARCHAR/TEXT/BLOB),
+    动态(DYNAMIC), 字段中不包含了VARCHAR/TEXT/BLOB),
+    压缩(COMPRESSED, 只能通过 myisampack创建)
+
+·InnoDB存储引擎
+
+
+##
+
+
+
+
+
 //
