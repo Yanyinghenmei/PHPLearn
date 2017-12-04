@@ -191,7 +191,11 @@ INSERT
 
 ## MySQL 数据操作
 · 添加记录
-    INSERT [INTO] tbl_name(col_name...) {VALUE|VALUES}(values...);
+    ·INSERT [INTO] tbl_name(col_name...) {VALUE|VALUES}(values...);
+     不指定字段名称: INSERT tbl_name VALUE(value...) 需要按建表时的字段顺序
+    ·一次插入多条: INSERT tbl_name(col_name) VALUES(...),(...)...;
+    ·INSERT tbl_name SET col_name=value,...
+    ·INSERT tbl_name(col_name...) SELECT col_name... FROM tbl_name [WHERE]
 · 修改记录
 · 删除记录
 · 查询记录
