@@ -173,9 +173,28 @@ INSERT
     压缩(COMPRESSED, 只能通过 myisampack创建)
 
 ·InnoDB存储引擎
+  1. MySQL5.5之后默认引擎, 设计遵循ACID模型, 支持事务, 具有从服务崩溃中回复的能力,
+    能够最大限度保护数据
+    ·原子性(Atomiocity)
+    ·一致性(Consistency)
+    ·隔离性(Isolation)
+    ·持久性(Durability)
+  2. 支持行级锁: 提升多用户并发的读写性能
+  3. 支持外键, 保证数据一致性和完整性
+  4. 拥有自己独立的缓存池, 常用的数据和索引都在混村中
+  5. 对INSERT UPDATE DELETE, InnoDB 会使用一种change buffering 的机制自动优化
+    还可以提供一致性的读, 并且还能够混村变更的数据, 减少磁盘I/O, 提高性能
+  6. 创建InnoDB 表之后会产生两个文件
+    ·frm表结构文件
+    ·ibd数据+索引表空间
+  7. 所有的表都需要创建主键, 最好配上AUTO_INCREMENT, 也可以放到经常查询的列作为主键
 
-
-##
+## MySQL 数据操作
+· 添加记录
+    INSERT [INTO] tbl_name(col_name...) {VALUE|VALUES}(values...);
+· 修改记录
+· 删除记录
+· 查询记录
 
 
 
