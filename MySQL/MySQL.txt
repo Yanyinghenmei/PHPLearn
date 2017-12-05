@@ -133,6 +133,8 @@ INSERT
     ALTER TABLE tbl_name ALTER 字段名 SET DEFAULT 默认值
 ·删除默认值
     ALTER TABLE tbl_name ALTER 字段名 DROP DEFAULT
+·重置编号AUTO_INCREMENT
+    ALTER TABLE `user` AUTO_INCREMENT=1;
 
 ## 修改字段类型/约束 modify
     ALTER TABLE tbl_name MODIFY 字段名 字段类型 [约束] [位置:FIRST|AFTER]
@@ -197,7 +199,14 @@ INSERT
     ·INSERT tbl_name SET col_name=value,...
     ·INSERT tbl_name(col_name...) SELECT col_name... FROM tbl_name [WHERE]
 · 修改记录
+    ·UPDATE tbl_name SET col_name=value,col_name=value,... [WHERE 条件]
+      如果不添加条件, 这个表中的内容都会被更新
+
 · 删除记录
+    ·DELETE FROM tbl_name [WHERE];
+      如果不加条件, 表中所有记录会被删除. 不会重置AUTO_INCREMENT的值
+    ·TRUNCATE [TABLE] tbl_name;
+      清除表中所有记录并重置AUTO_INCREMENT
 · 查询记录
 
 
