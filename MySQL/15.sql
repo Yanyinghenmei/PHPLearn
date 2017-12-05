@@ -7,3 +7,10 @@ UPDATE `user` SET age=10,email=DEFAULT WHERE age>10;
 -- 测试delete
 DELETE FROM `uesr` WHERE id=3;
 DELETE FROM `user` WHERE username='daniel';
+DELETE FROM `user` WHERE username='daniel',age=24;
+
+-- 重置编号 AUTO_INCREMENT
+ALTER TABLE `user` AUTO_INCREMENT=1;
+
+-- 清空并重置编号
+TRUNCATE TABLE `user`;
