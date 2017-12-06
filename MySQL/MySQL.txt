@@ -208,9 +208,26 @@ INSERT
     ·TRUNCATE [TABLE] tbl_name;
       清除表中所有记录并重置AUTO_INCREMENT
 · 查询记录
+    ·SELECT select_expr,... FROM tbl_name [WHERE 条件]
+    [GROUP BY {col_name|position} HAVING 二次筛选]
+    [ORDER BY {col_name|position|expr}{ASC|DESC}]
+    [LIMT 限制结果集的显示条数]
+
+    ·SELECT * FROM tbl_name 查询表中的所有记录 *代表所有字段
+    ·select 字段名,... FROM tbl_name
 
 
+    ·库名.表名
+      SELECT 字段名,...FROM db_name.tbl_name;
 
+    ·给字段起名:
+      SELECT 字段名 [AS] 别名名称 db_name.tbl_name;
+
+    ·给数据表起别名
+      SELECT 字段名,... FROM tbl_name [AS] 表名;
+
+    ·表名.字段名
+      SELECT tbl_name.col_name FROM tbl_name;
 
 
 //
