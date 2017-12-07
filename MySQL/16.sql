@@ -8,7 +8,7 @@ CREATE TABLE `user1`(
   `salary` FLOAT(8,2) NOT NULL DEFAULT 0
 )ENGINE=InnoDB CHARSET=UTF8;
 -- 添加字段
-ALTER TABLE user1 ADD 'addr' VARCHAR(20) NOT NULL DEFAULT '北京';
+ALTER TABLE user1 ADD `addr` VARCHAR(20) NOT NULL DEFAULT '北京';
 -- 修改字段
 ALTER TABLE user1 MODIFY `addr` VARCHAR(20) NOT NULL DEFAULT '北京' AFTER `sex`;
 
@@ -46,8 +46,45 @@ SELECT id,username,age FROM user1 as u;
 SELECT user1.id,user1.username,user1.age FROM user1;
 
 
+-- WHERE 测试
+SELECT id,username,age FROM user1 WHERE id=5;
 
+-- 添加desc字段
+ALTER TABLE `user1` ADD `desc` VARCHAR(100);
 
+-- 更新id<=7的用户 desc = this is a test
+UPDATE `user1` SET `desc`='this is a test' WHERE id<=6;
+
+-- 检测desc 为空的用户
+SELECT * FROM `user1` WHERE `desc`=NULL; -- 失败
+SELECT * FROM `user1` WHERE `desc`<>NULL;
+
+-- IS NOT NULL
+SELECT * FROM `user1` WHERE `desc` IS NOT NULL;
+
+-- 测试范围
+SELECT * FROM `user1` WHERE `age` BETWEEN 15 AND 30;
+SELECT * FROM `user1` WHERE `age` NOT BETWEEN 15 AND 30;
+
+SELECT * FROM `user1` WHERE `salary` BETWEEN 0 AND 3000;
+
+-- 指定集合 IN
+SELECT * from `user1` WHERE `age` IN(23);
+SELECT * from `user1` WHERE `age` NOT IN(23);
+SELECT * from `user1` WHERE `username` IN('Joe');
+
+-- 逻辑与AND 逻辑或OR
+SELECT * from `user1` WHERE `married`=0 AND `salary`=2300 AND `age`=72;
+SELECT * from `user1` WHERE `id`=1 OR `sex`='女';
+SELECT * from `user1` WHERE `salary` BETWEEN 3000 AND 5000 AND `sex`='男';
+
+-- like
+SELECT * from `user1` WHERE `username` LIKE 'Joe';
+SELECT * from `user1` WHERE `username` LIKE '%三%';
+SELECT * from `user1` WHERE `username` LIKE '张%';
+
+-- 用户名为三位的用户
+SELECT * from `user1` WHERE `username` LIKE '___';
 
 
 

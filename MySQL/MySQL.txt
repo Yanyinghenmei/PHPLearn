@@ -229,5 +229,20 @@ INSERT
     ·表名.字段名
       SELECT tbl_name.col_name FROM tbl_name;
 
+    ·筛选复合条件的记录
+      SELECT col_name,... FROM tbl_name WHERE 条件
+      ·比较运算符
+        ·比较运算符: > >= < <= !=
+        ·<> 不等于
+        ·<=> 等于,可以检测到NULL = 检测不到NULL
+        ·IS [NOT] NULL 检测值是否为空
+      ·范围
+        [NOT] BETWEEN ... AND
+      ·集合
+        [NOT] IN(值,...)
+      ·逻辑与AND 逻辑或OR
+      ·匹配字符,模糊查询 like 默认忽略大小写
+        ·% 任意长度字符串
+        ·_任意一个字符
 
 //
