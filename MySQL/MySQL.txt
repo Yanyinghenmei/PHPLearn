@@ -244,5 +244,52 @@ INSERT
       ·匹配字符,模糊查询 like 默认忽略大小写
         ·% 任意长度字符串
         ·_任意一个字符
+    ·分组 group by:
+      把值相同的放在一个组中, 最终查询的结果只会显示组中的一条记录
+      ·配合GROUP_CONCAT()查看组中的某个字段的详细信息
+      ·配合聚合函数使用
+
+    ·聚合函数
+      COUNT()         数量     如果是COUNT(`字段名`)  字段值为NULL的记录不统计进来 COUNT(*)则会统计
+      SUM()           求和
+      MAX()           最大值
+      MIN()           最小值
+      AVG()           平均值
+    ·WITH ROLLUP 关键字, 会在记录末尾添加一条记录, 是上面记录的综合
+
+    ·HAVING 子句对分组结果进行二次筛选
+      注意: HAVING 只能接 GROUP BY 前面提到的字段 或聚合函数
+
+
+
+    ·ORDER BY 排序
+      ORDER BY 字段 ASC|DESC (默认是ASC)
+      ASC 升序: 1234....
+      DESC 降序: 432...
+
+    ·实现随机记录
+      ORDER BY RAND();
+      SELECT * FROM user1 ORDER BY RAND();
+
+    ·LIMIT限制结果集的显示条数(分页)
+      Limit 值:  显示结果集的前几条记录
+      LImit offset,row_count 从offset显示row_count条记录
+      注意: UPDATE或者DELETE时 LIMIT只支持一个参数形式
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //

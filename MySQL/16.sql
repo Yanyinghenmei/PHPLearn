@@ -86,8 +86,121 @@ SELECT * from `user1` WHERE `username` LIKE '张%';
 -- 用户名为三位的用户
 SELECT * from `user1` WHERE `username` LIKE '___';
 
+-- 测试分组
+SELECT * from `user1` GROUP BY `sex`;
+SELECT * from `user1` GROUP BY `addr`;
+
+SELECT GROUP_CONCAT(`username`),GROUP_CONCAT(`age`),`sex`,`addr`
+FROM `user1` GROUP BY `sex`;
+
+-- 测试COUNT()
+SELECT COUNT(*) AS total_users FROM `user1`;
+SELECT COUNT(`desc`) FROM `user1`;
+
+-- 按照sex分组, 得到用户名详情, 分别统计组中的总人数
+SELECT GROUP_CONCAT(username),COUNT(*) AS total_count,sex FROM user1
+GROUP BY sex;
+
+-- 按照addr分钟, 得到用户名详情, 总人数, 年龄综合, 年龄最大值
+SELECT GROUP_CONCAT(username),
+COUNT(*) AS total_count,SUM(age) AS sum_age, MAX(age) AS max_age
+FROM user1 GROUP BY addr;
+
+SELECT sex,GROUP_CONCAT(username) AS user_names,
+COUNT(*) AS total_count,
+SUM(salary) AS sum_salary,
+MAX(salary) AS max_salary,
+MIN(salary) AS min_salary,
+AVG(salary) AS avg_salary
+FROM user1 GROUP BY sex;
+
+SELECT GROUP_CONCAT(username) AS user_names,
+COUNT(*) AS total_count FROM user1 GROUP BY sex
+WITH ROLLUP;
+
+SELECT GROUP_CONCAT(username) AS user_names,
+COUNT(*) AS total_count FROM user1 GROUP BY addr
+WITH ROLLUP; -- 末尾加一个查询的综合
+
+SELECT sex,GROUP_CONCAT(username) AS user_names,
+COUNT(*) AS total_count,
+SUM(salary) AS sum_salary,
+MAX(salary) AS max_salary,
+MIN(salary) AS min_salary,
+AVG(salary) AS avg_salary
+FROM user1 GROUP BY 1; -- 按照位置指定分组的字段
+
+SELECT GROUP_CONCAT(username) AS usersDetail,SUM(age)
+FROM user1 WHERE age>=15 GROUP BY sex WITH ROLLUP;
+
+-- HAVING 测试  对分组结果进行二次筛选, 组中总人数等于1
+SELECT addr,GROUP_CONCAT(username),COUNT(*) AS total_count
+FROM user1 GROUP BY 1 HAVING COUNT(*)<=>1;
+
+SELECT addr,GROUP_CONCAT(username),COUNT(*) AS total_count
+FROM user1 GROUP BY 1 HAVING total_count<=>1;
+
+-- 练习
+SELECT GROUP_CONCAT(username),
+COUNT(*) AS total_count,
+SUM(salary) AS sum_salary,
+MAX(salary) AS max_salary,
+MIN(salary) AS min_salary,
+AVG(salary) AS avg_salary
+FROM user1 GROUP BY addr
+having avg_salary>=5000;
+
+CREATE TABLE student(
+  id INT UNSIGNED AUTO_INCREMENT KEY,
+  grade TINYINT UNSIGNED DEFAULT 0,
+  age TINYINT UNSIGNED DEFAULT 0
+);
 
 
+-- 测试排序
+SELECT * FROM user1 ORDER BY salary DESC;
+SELECT * FROM user1 ORDER BY age;
+SELECT * FROM user1 ORDER BY age DESC;
+
+-- 按照多个字段排序  salary一样的话, 按照age排序
+SELECT * FROM user1 ORDER BY salary DESC, age DESC;
+
+-- 随机排序
+SELECT * FROM user1 ORDER BY RAND();
+
+-- 测试limit 显示前3条
+SELECT * FROM user1 LIMIT 3;
+SELECT * FROM user1 ORDER BY id DESC LIMIT 0,3;
+-- 偏移3, 显示5条
+SELECT * FROM user1 ORDER BY id DESC LIMIT 3,5;
+
+-- var page=1, page_size=10;
+SELECT * from user1 LIMIT (page-1)*page_size,page_size;
+
+
+-- 练习
+UPDATE `user1` SET age=age+5 LIMIT 3;
+UPDATE `user1` SET age=age-10 ORDER BY id DESC LIMIT 3;
+
+-- 删除前三条
+DELETE FROM `user1` LIMIT 3;
+DELETE FROM `user1` ORDER BY id LIMIT 3;
+
+DELETE FROM `user1` ORDER BY id DESC LIMIT 3;
+
+-- 综合练习
+SELECT salary,
+GROUP_CONCAT(username) AS user_names,
+COUNT(*) total_count,
+SUM(age) AS sum_age,
+MAX(age) AS max_age,
+MIN(age) AS min_age,
+AVG(age) AS avg_age
+FROM user1
+WHERE id>=3
+GROUP BY salary HAVING salary>=5000
+ORDER BY total_count DESC
+LIMIT 0,1;
 
 
 
