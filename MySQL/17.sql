@@ -127,10 +127,11 @@ INNER JOIN pro AS p
 ON u.proId=p.id;
 
 -- goods.id name price cate adminname email
-SELECT g.id,g.productName,g.price,c.cateName,u.username,u.email
+SELECT g.id,g.productName,g.price,c.cateName,u.username,u.email,p.proName
 FROM goodsList AS g
 INNER JOIN goodsType AS c ON g.cateId=c.id
 INNER JOIN user AS u ON g.adminId=u.id
+INNER JOIN pro AS p ON u.proId=p.id
 WHERE g.price>500
 ORDER BY g.price DESC
 LIMIT 0,2;
