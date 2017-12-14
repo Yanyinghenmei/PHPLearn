@@ -277,6 +277,18 @@ INSERT
       注意: UPDATE或者DELETE时 LIMIT只支持一个参数形式
 
 
+    ·多表查询
+      ·笛卡尔积的形式
+      ·内连接的形式     查询两个表中复合链接条件的记录
+        SELECT 字段名,.. FROM tbl_name1 [INNER] JOIN tbl_name2 ON 链接条件
+      ·外链接的形式
+
+        左外链接 先显示左表的全部记录,再去右表中查询符合条件的记录,不符合的以NULL代替, 左主表,右从表
+          SELECT 字段名,... FROM tbl_name1 LEFT [OUTER] JOIN tabl_name2 ON 条件
+        右外链接 先显示右表的全部记录,再去左表中查询符合条件的记录,不符合的以NULL代替, 右主表,左从表
+          SELECT 字段名,... FROM tbl_name1 RIGHT [OUTER] JOIN tabl_name2 ON 条件
+
+
 
 
 
