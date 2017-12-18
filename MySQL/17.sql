@@ -108,6 +108,7 @@ CREATE TABLE `goodsList`(
   `cateId` TINYINT UNSIGNED NOT NULL,
   `adminId` TINYINT UNSIGNED NOT NULL
 );
+
 INSERT goodsList(productName,price,cateId,adminId) VALUES
 ('ipone9',9888,3,1),
 ('adidas',388,2,2),
