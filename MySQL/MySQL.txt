@@ -118,6 +118,23 @@
 ·UNIQUE KEY 唯一性, 一个表可以有多个唯一所以, 值不能重复, 但NULL可以
 ·AUTO_INCREMEN 自增长, 只能用于数值列, 而且配合索引所有
 ·FOREIGN KEY 外键约束
+  只有InnoDB存储引擎支持外键
+  主表的外键必须关联副表的主键
+  1.子表的外键字段和主表的主键字段, 类型相似, 如果是数值类型, 类型要求一致, 并且无符号也要一致
+  如果是字符型长度可以不同
+  2.如果外键字段没有创建索引, MySQL会自动帮我们添加索引
+  3.子表的外键必须关联主表的主键
+  ·建表时指定外键: [CONSTRAINT 外键名称] FOREIGN KEY(字段名称) REFERENCES 主表字段名称
+  ·动态添加外键: ALTER TABLE tbl_name [CONSTRAINT cateId_fk_newsCate] ADD FOREIGN KEY(外键字段) REFERENCES (主表主键)
+      注意: 动态添加外键之前, 表中的记录一定要是合法的
+  ·动态删除外键: ALTER TABLE tbl_name DROP FOREIGN KEY fk_name;
+
+  外键约束的参照操作:
+    CASCADE               从父表删除或更新, 子表也会删除或更新
+    SET NULL              父表删除或更新 对应的子表字段设置为NULL
+    NO ACTION|RESTRICT    (默认)拒绝对父表做更新或产出操作
+
+
 
 ## 插入
 INSERT
