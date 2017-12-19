@@ -114,8 +114,60 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 UPDATE news_cate SET id=11 WHERE id=1
 DELETE FROM news_cate WHERE id=2;
 
+-- 子查询
+SELECT * FROM news WHERE cateId=(SELECT id FROM news_cate WHERE cateName='娱乐新闻');
+SELECT * FROM news WHERE cateId IN (SELECT id FROM news_cate);
+SELECT * FROM news WHERE id NOT IN (SELECT id FROM news_cate);
+
+
+CREATE TABLE `stu`(
+  `id` TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `username` CHARACTER(20) NOT NULL UNIQUE,
+  `score` TINYINT UNSIGNED NOT NULL
+)ENGINE=InnoDB;
+
+INSERT `stu`(`username`,`score`) VALUES
+('daniel',95),
+('joe',90),
+('zhangsan',69),
+('lisi',78),
+('wangwu',89),
+('zhaoliu',34),
+('huangqi',43),
+('ceshi',77),
+('tony',55);
+INSERT `stu`(username,score) VALUES('bob',70);
+
+CREATE TABLE `level`(
+  id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+);
+
+INSERT `level`(score) VALUES(90),(80),(70);
+
+-- 查询出成绩优秀的同学
+SELECT * FROM stu WHERE score>=(SELECT score FROM level WHERE id=1);
+
+SELECT * FROM stu WHERE score BETWEEN
+(SELECT score FROM level WHERE id=3) AND (SELECT score FROM level WHERE id=1);
+
+-- EXISTS
+SELECT * FROM stu WHERE EXISTS (SELECT id FROM stu WHERE id=1);
+SELECT * FROM stu WHERE EXISTS (SELECT id FROM stu WHERE id=11);
+SELECT * FROM stu WHERE NOT EXISTS (SELECT id FROM stu WHERE id=11);
 
 
 
 
-//
+
+
+
+
+
+
+
+
+
+
+
+--
