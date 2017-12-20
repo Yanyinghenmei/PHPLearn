@@ -116,7 +116,7 @@
 ·DEFAULT 默认值
 ·PRIMARY KEY 主键, 标记记录的唯一性, 不能重复, 一个表只能有一个主键, 自动禁止为空
 ·UNIQUE KEY 唯一性, 一个表可以有多个唯一所以, 值不能重复, 但NULL可以
-·AUTO_INCREMEN 自增长, 只能用于数值列, 而且配合索引所有
+·AUTO_INCREMENT 自增长, 只能用于数值列, 而且配合索引所有
 ·FOREIGN KEY 外键约束
   只有InnoDB存储引擎支持外键
   主表的外键必须关联副表的主键
@@ -312,13 +312,21 @@ INSERT
             由IN引发的子查询
             由比较运算符引起的子查询
             由exists引发的子查询
+            带有ANY SOME ALL关键字的子查询
+
+            INSERT SELECT
+            CREATE SELECT
 
 
 
 
 
+    ·联合查询
+      UNION
+      UNION ALL
+      SELECT col_name... FROM tbl_name1 UNION [ALL] SELECT col_name FROM tbl_name2
 
-
+    ·自身连接查询: 无限分类数据表的实现形式
 
 
 

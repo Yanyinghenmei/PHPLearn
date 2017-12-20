@@ -156,7 +156,25 @@ SELECT * FROM stu WHERE EXISTS (SELECT id FROM stu WHERE id=1);
 SELECT * FROM stu WHERE EXISTS (SELECT id FROM stu WHERE id=11);
 SELECT * FROM stu WHERE NOT EXISTS (SELECT id FROM stu WHERE id=11);
 
+-- 大于等于最小值
+SELECT * FROM stu WHERE score>= ANY(SELECT score FROM level);
+SELECT * FROM stu WHERE score>= SOME(SELECT score FROM level);
 
+-- 大于等于最大值
+SELECT * FROM stu WHERE score>= ALL(SELECT score FROM level);
+
+-- 小于等于最大值
+SELECT * FROM stu WHERE score<= ANY(SELECT score FROM level);
+SELECT * FROM stu WHERE score<= SOME(SELECT score FROM level);
+
+-- 小于最小值
+SELECT * FROM stu WHERE score< ALL(SELECT score FROM level);
+
+-- 等于任意值
+SELECT * FROM stu WHERE score= ANY(SELECT score FROM level);
+
+-- 不等于任意值
+SELECT * FROM stu WHERE score!= ALL(SELECT score FROM level);
 
 
 
