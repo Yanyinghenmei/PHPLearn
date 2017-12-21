@@ -330,6 +330,55 @@ INSERT
 
 
 
+## 常用的数学函数
+    SELECT CEIL()         进一取整
+    SELECT FLOOR()        舍一取整
+    SELECT ROUND()        四舍五入          select round(23.435,2);
+    SELECT TRUNCATE()     保留几位小数       select truncate(2.23423,3);
+    SELECT MOD()          取余数
+    SELECT ABS()          取绝对值
+    SELECT POWER()        幂运算
+    SELECT PI()           圆周率
+    SELECT RAND()         随机数
+    SELECT SIGN()         得到数值的正负符号
+    SELECT EXP()          E的几次幂
+
+## 常用的字符串函数
+    CHAR_LENGTH()         字符数
+    LENGTH()              得到字符串的长度
+    CONCAT()              合并字符串, 如果字符串中有NULL 拼接结果就是NULL
+    CONCAT_WS()           以指定分隔符拼接字符串
+    UPPER()/UCASE()       将字符串转换成大写
+    LOWER()/LCASE()       将字符串转换成小写
+    REVERSE()             字符串反转
+    LEFT()/RIGHT()        返回字符串的前/后几个字符
+    LPAD()/RPAD()         用字符串填充到指定长度  select lpad('abc',10,'?');
+    TRIM()/LTRIM()/RTRIM()  去掉字符串两端的空格
+    REPEAT()              重复字符串
+    REPLACE()             字符串替换
+    SUBSTRING()           截取字符串: 从1开始
+    STRCMP()              比价字符串
+
+## 日期时间函数
+    CURDATE()/CURRENT_DATE()              返回当前日期
+    CURTIME()/CURRENT_TIME()              返回当前时间
+    NOW()/CURRENT_TIMESTAMP()/SYSDATE()   返回当前日期时间
+    MONTH()                               获取日期中的月份
+    MONTHNAME()                           获取日期中月份的名称
+    DAYNAME()                             获取当前是周几
+    DAYOFWEEK()                           一周的第几天
+    WEEK()                                一年的第几周
+    YEAR()                                获取年份
+    DAY()                                 获取今天是几号
+    HOUR()                                获取小时
+    MINTUE()                              获取分钟
+    SECOND()                              获取秒数
+    DATEDIFF()                            计算两个日期相差的天数
+    
+
+
+
+
 
 
 
