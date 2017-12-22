@@ -64,3 +64,8 @@ LEFT JOIN cate AS s
 ON s.pId=p.id
 GROUP BY p.cateName
 ORDER BY p.id;
+
+
+
+
+--

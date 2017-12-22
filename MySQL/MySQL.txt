@@ -374,7 +374,21 @@ INSERT
     MINTUE()                              获取分钟
     SECOND()                              获取秒数
     DATEDIFF()                            计算两个日期相差的天数
-    
+
+## 其他常用函数
+    VERSION()                             数据库版本
+    CONNECTION_ID()                       当前服务器连接数
+    DATABASE()                            当前数据库名
+    USER()/CURRENT_USER()/SYSTEM_USER()/SESSION_USER()    当前登录的用户
+    LAST_INSERT_ID()                      得到上一步插入产生的AUTO_INCREMENT的值
+    MD5()                                 加密
+    PASSWORD()                            MySQL默认用户密码加密算法
+
+## 图形化工具管理数据库
+    BS: phpMyAdmin
+    CS: Sequel Pro
+    windows: SQLyog, navit for mysql, mysql front, mysql workbench
+
 
 
 

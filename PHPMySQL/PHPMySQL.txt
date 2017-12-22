@@ -1,0 +1,6 @@
+## PHP操作MySQL的是三种方式
+  1. MySQL: 非永久连接,性能比较低,PHP5.5以后被废弃
+  2. MYSQLi: 永久连接,减轻服务器压力,只支持MySQL
+  3. PDO: 能实现MySQLi的常用功能,支持大部分数据库
+
+  PHP扩展查看函数: phpinfo()
